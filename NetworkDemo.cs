@@ -11,6 +11,7 @@ public class NetworkDemo : MonoBehaviour
     }
     private void OnEnable()
     {
+        //PhotonNetwork.NetworkingClient.EventReceived += OnEvent; 官網會這樣綁，OnEvent是自己的function
         Service.BindEvent<int>(NetworkEvent.event1, OnEvent1);
         Service.BindEvent<int, string, float>(NetworkEvent.TestTcp, ReceiveTcp);
         Service.BindEvent<PlayerInfo>(NetworkEvent.TestUdp, ReceiveUdp);
@@ -29,6 +30,14 @@ public class NetworkDemo : MonoBehaviour
             string s = $"key{Random.Range(1, 500)}"
             float f = Random.Range(-1, -1000);
             NetworkService.TriggerToAll(NetworkEvent.TestTcp, i , s, f);
+            /* 會這樣Invoke
+            private void SendMoveUnitsToTargetPositionEvent()
+            {
+                object[] content = new object[] { new Vector3(10.0f, 2.0f, 5.0f), 1, 2, 5, 10 }; // Array contains the target position and the IDs of the selected units
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+                PhotonNetwork.RaiseEvent(MoveUnitsToTargetPositionEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+            }
+            */
         }
         if(Input.GetKeyDown(KeyCode.W))
         {
